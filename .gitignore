@@ -1,0 +1,15 @@
+.idea/
+*.iml
+*.iws
+*.ipr
+target/
+*.log
+*.tar
+*.tgz
+*.7z
+*.bz2
+*.jar
+*.swp
+*.swo
+*.pyc
+*.pyo

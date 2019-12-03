@@ -1,0 +1,9 @@
+.state/
+*.log
+*.zip
+*.tgz
+*.bz2
+*.7z
+*.swp
+*.swo
+*.pyo
