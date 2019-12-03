@@ -48,7 +48,9 @@ the catalog section that follows.
 
 ## Catalog
 
-| sub-directory      | comment                            |
-| ------------------ | ---------------------------------- |
-| account            | imaginary bank account             |
-| employee           | imaginary employee directory       |
+| sub-directory      | comment                                   |
+| ------------------ | ----------------------------------------- |
+| account            | imaginary bank account                    |
+| employee           | imaginary employee directory              |
+| cluster            | cluster wide queries                      |
+| blog               | imaginary blogs to demo index/shards etc  |
