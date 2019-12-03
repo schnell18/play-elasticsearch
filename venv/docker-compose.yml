@@ -1,13 +1,16 @@
 # dockerized virtual environment for ELK
 version: '3'
 services:
-
-  elasticsearch:
-    image: "elasticsearch:7.4.2"
+  es01:
+    image: elasticsearch:7.4.2
+    container_name: es01
     environment:
-      - discovery.type=single-node
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es02,es03
+      - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
     ulimits:
       memlock:
         soft: -1
@@ -15,15 +18,72 @@ services:
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
       - ./provision/global/etc/timezone:/etc/timezone
-      - .state/elasticsearch:/usr/share/elasticsearch/data
+      - .state/elasticsearch/es01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+    networks:
+      - elastic
 
-  kibana:
-    image: "kibana:7.4.2"
-    ports:
-      - 15601:5601
+  es02:
+    image: elasticsearch:7.4.2
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es03
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
       - ./provision/global/etc/timezone:/etc/timezone
-      - ./provision/kibana/kibana.yml/:/usr/share/kibana/config/kibana.yml
+      - .state/elasticsearch/es02:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9201
+    networks:
+      - elastic
+
+  es03:
+    image: elasticsearch:7.4.2
+    container_name: es03
+    environment:
+      - node.name=es03
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=es01,es02
+      - cluster.initial_master_nodes=es01,es02,es03
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./provision/global/etc/localtime:/etc/localtime
+      - ./provision/global/etc/timezone:/etc/timezone
+      - .state/elasticsearch/es03:/usr/share/elasticsearch/data
+    ports:
+      - 9202:9202
+    networks:
+      - elastic
+
+  kib01:
+    image: kibana:7.4.2
+    container_name: kib01
+    volumes:
+      - ./provision/global/etc/localtime:/etc/localtime
+      - ./provision/global/etc/timezone:/etc/timezone
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
+    networks:
+      - elastic
+
+networks:
+  elastic:
+    driver: bridge

@@ -1,14 +1,15 @@
 # Introduction
 
-This is a collection mini scripts to practise *Elasticsearch*
-index/query/analyze etc.
+This is a collection mini scripts to practise examples such as
+index/query/analyze etc in the book [*Elasticsearch The Definitive
+Guide*][1].
 
-## Pre-requiste
+## Pre-requistes
 
 This project makes of docker and docker-compose to provison a single
 node Elasticsearch environment. You need following tools:
 
-- recent docker community edition(tested on 18.06.0-ce)
+- recent [docker community edition][2](tested on 18.06.0-ce)
 - curl
 
 ## Start the virtual environment
@@ -54,3 +55,7 @@ the catalog section that follows.
 | employee           | imaginary employee directory              |
 | cluster            | cluster wide queries                      |
 | blog               | imaginary blogs to demo index/shards etc  |
+
+
+[1]: https://www.elastic.co/guide/en/elasticsearch/guide/2.x/index.html
+[2]: https://hub.docker.com/search?type=edition&offering=community

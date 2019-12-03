@@ -4,9 +4,7 @@ curl -X PUT "localhost:9200/blog" \
 {
   "settings": {
     "number_of_shards": 3,
-    "number_of_replicas": 1
+    "number_of_replicas": 2
   }
 }
 '
-
-
