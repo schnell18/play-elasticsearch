@@ -55,7 +55,8 @@ the catalog section that follows.
 | employee           | imaginary employee directory              |
 | cluster            | cluster wide queries                      |
 | blog               | imaginary blogs to demo index/shards etc  |
-
+| mappings           | index options and field data type         |
+| search             | various search examples                   |
 
 [1]: https://www.elastic.co/guide/en/elasticsearch/guide/2.x/index.html
 [2]: https://hub.docker.com/search?type=edition&offering=community
