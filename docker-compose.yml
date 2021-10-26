@@ -1,8 +1,8 @@
 # dockerized virtual environment for ELK
-version: '3'
+version: '3.0'
 services:
   es01:
-    image: elasticsearch:7.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     container_name: es01
     environment:
       - node.name=es01
@@ -10,7 +10,7 @@ services:
       - discovery.seed_hosts=es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -18,14 +18,14 @@ services:
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
       - ./provision/global/etc/timezone:/etc/timezone
-      - .state/elasticsearch/es01:/usr/share/elasticsearch/data
+      # - .state/elasticsearch/es01:/usr/share/elasticsearch/data
+      - data01:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
     networks:
       - elastic
-
   es02:
-    image: elasticsearch:7.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     container_name: es02
     environment:
       - node.name=es02
@@ -33,7 +33,7 @@ services:
       - discovery.seed_hosts=es01,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -41,14 +41,15 @@ services:
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
       - ./provision/global/etc/timezone:/etc/timezone
-      - .state/elasticsearch/es02:/usr/share/elasticsearch/data
+      # - .state/elasticsearch/es02:/usr/share/elasticsearch/data
+      - data02:/usr/share/elasticsearch/data
     ports:
-      - 9201:9201
+      - 9201:9200
     networks:
       - elastic
 
   es03:
-    image: elasticsearch:7.4.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     container_name: es03
     environment:
       - node.name=es03
@@ -56,7 +57,7 @@ services:
       - discovery.seed_hosts=es01,es02
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
         soft: -1
@@ -64,14 +65,16 @@ services:
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
       - ./provision/global/etc/timezone:/etc/timezone
-      - .state/elasticsearch/es03:/usr/share/elasticsearch/data
+      # - .state/elasticsearch/es03:/usr/share/elasticsearch/data
+      - data03:/usr/share/elasticsearch/data
     ports:
-      - 9202:9202
+      - 9202:9200
     networks:
       - elastic
 
   kib01:
-    image: kibana:7.4.2
+    # image: kibana:7.4.2
+    image: docker.elastic.co/kibana/kibana:7.15.1
     container_name: kib01
     volumes:
       - ./provision/global/etc/localtime:/etc/localtime
@@ -83,6 +86,14 @@ services:
       ELASTICSEARCH_HOSTS: http://es01:9200
     networks:
       - elastic
+
+volumes:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
 
 networks:
   elastic:
